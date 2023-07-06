@@ -1,6 +1,5 @@
 import HeroPage from "@/components/LandingPage/HeroPage";
 import NavbarLinks from "@/components/Navbar/NavbarLinks";
-import BlogCardList from "@/components/admin/blogCardAdmin/BlogCardLongList";
 import React from "react";
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
         <NavbarLinks />
       </div>
       <HeroPage />
-      <BlogCardList />
     </main>
   );
 }

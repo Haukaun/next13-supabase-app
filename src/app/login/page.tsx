@@ -4,12 +4,20 @@ import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import { Session } from "@supabase/auth-helpers-nextjs";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Login() {
   const [supabase] = useState(() => supabaseclient);
 
+  const router = useRouter();
+
   const [session, setSession] = useState<Session | null>(null);
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    router.push("/");
+  }
 
   useEffect(() => {
     supabase.auth
@@ -24,11 +32,11 @@ export default function Login() {
   }, []);
   if (!session) {
     return (
-      <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+      <div className="m-auto px-8 sm:max-w-md gap-2">
         <a className="underline hover:font-medium" href="/">
           {"Go to main page"}
         </a>
-        <div className="card">
+        <div className="">
           <Auth
             supabaseClient={supabase}
             view="magic_link"
@@ -44,7 +52,7 @@ export default function Login() {
     return (
       <div className="flex flex-col justify-center items-center">
         <h1>{session.user.user_metadata.full_name}</h1>
-        <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+        <button onClick={signOut}>Sign out</button>
       </div>
     );
   }

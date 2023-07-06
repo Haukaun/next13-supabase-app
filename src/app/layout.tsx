@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import NavBar from "@/components/Navbar/NavBar";
 import "./globals.css";
 import { Poppins } from "next/font/google";
@@ -21,21 +19,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
   return (
-    <html
-      lang="en"
-      data-theme={theme}
-      className="flex flex-col min-h-screen items-center"
-    >
-      <body className={poppins.className + "flex flex-col min-h-screen"}>
-        <div className="max-w-4xl mx-5 flex flex-col min-h-screen">
-          <NavBar theme={theme} setTheme={setTheme} />
+    <html lang="en" className="flex flex-col min-h-screen items-center">
+      <body className={poppins.className + "flex flex-col min-h-screen w-full"}>
+        <div className="max-w-4xl mx-auto flex flex-col min-h-screen">
+          <NavBar />
           <div className="flex-grow">{children}</div>
           <Footer />
         </div>

@@ -1,24 +1,22 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
-import React, { useState } from "react";
 
 export default async function AdminPage() {
   const [supabase] = useState(() => supabaseclient);
 
-  let { data: user } = await supabase.from("profiles").select("*").single();
+  let { data: session } = await supabase.auth.getSession();
 
-  if (user.role === "ADMIN") {
-    return (
-      <div>
-        <h1>{"ADMIN PAGE"}</h1>
-      </div>
-    );
+  const { data: user } = await supabaseclient
+    .from("profiles")
+    .select("*")
+    .eq("id", session.session?.user.id)
+    .single();
+
+  if (user?.role === "ADMIN") {
+    return <h1>ADMIN PAGE</h1>;
   } else {
-    return (
-      <div>
-        <h1>{"NOT ADMIN"}</h1>
-      </div>
-    );
+    return <h1>NOT ADMIN</h1>;
   }
 }

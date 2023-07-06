@@ -1,12 +1,10 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import createClient from "@/lib/supabaselib/supabase-server";
 
-type NavBarProps = {
-  theme: string;
-  setTheme: React.Dispatch<React.SetStateAction<string>>;
-};
+export default async function NavBar() {
+  const supabase = createClient();
 
-export default function NavBar({ theme, setTheme }: NavBarProps) {
-  const { data: session } = useSession();
+  const { data } = await supabase.auth.getSession();
+
   return (
     <div className="navbar justify-between flex-wrap flex">
       <div>
@@ -52,42 +50,22 @@ export default function NavBar({ theme, setTheme }: NavBarProps) {
         </a>
       </div>
       <div className=" flex justify-end">
-        {!session && (
-          <a
-            className="btn btn-ghost btn-sm rounded-btn"
-            href="/api/auth/signin"
-            onClick={(e) => {
-              e.preventDefault();
-              signIn();
-            }}
-          >
-            Sign in
-          </a>
-        )}
-        {session?.user && (
+        {data.session?.user && (
           <div className="flex items-center justify-center gap-3">
-            <a
-              href={`/api/auth/signout`}
-              className="btn btn-ghost btn-sm rounded-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                signOut();
-              }}
-            >
-              Sign out
-            </a>
+            <img
+              src={
+                "https://github.com/" +
+                data.session.user.user_metadata.user_name +
+                ".png"
+              }
+              className="rounded-full w-10 h-10"
+              alt=""
+            />
           </div>
         )}
 
         <label className="swap swap-rotate">
-          <input
-            type="checkbox"
-            onChange={() =>
-              setTheme((prevTheme) =>
-                prevTheme === "light" ? "dark" : "light"
-              )
-            }
-          />
+          <input type="checkbox" />
 
           {/* sun icon */}
           <svg
