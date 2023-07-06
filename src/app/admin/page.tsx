@@ -1,14 +1,12 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import supabaseclient from "@/lib/supabaselib/supabase-browser";
+import React from "react";
+import createClient from "@/lib/supabaselib/supabase-server";
 
 export default async function AdminPage() {
-  const [supabase] = useState(() => supabaseclient);
+  const supabase = createClient();
 
   let { data: session } = await supabase.auth.getSession();
 
-  const { data: user } = await supabaseclient
+  const { data: user } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", session.session?.user.id)

@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Home() {
   return (
-    <main>
+    <main className="mx-10">
       <div className="pb-32">
         <NavbarLinks />
       </div>
