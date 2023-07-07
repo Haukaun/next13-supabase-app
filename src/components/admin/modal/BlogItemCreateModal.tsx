@@ -17,6 +17,8 @@ export const BlogItemCreateModal = ({ blogPostId }: Props) => {
     image: "/testimage.jpeg",
   });
 
+  console.log(blogPostId);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -34,11 +36,11 @@ export const BlogItemCreateModal = ({ blogPostId }: Props) => {
       return;
 
     await supabase
-      .from("blogItem") // replace this with the correct table name in your database
+      .from("blog_post_item") // replace this with the correct table name in your database
       .insert([
         {
           ...blogItem,
-          blogpostId: blogPostId,
+          blogPost: blogPostId,
         },
       ])
       .single();

@@ -18,7 +18,6 @@ const BlogCardLong = ({ blogPost }: Props) => {
       return;
     }
     await supabase.from("blog_post").delete().eq("id", blogPost.id);
-
     setIsDeleted(true);
   };
 
