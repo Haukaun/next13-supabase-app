@@ -20,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="flex flex-col min-h-screen items-center">
-      <body className={poppins.className + "flex flex-col min-h-screen w-full"}>
-        <div className="max-w-4xl mx-auto flex flex-col min-h-screen">
+    <html lang="en" className="flex flex-col items-center">
+      <body className={poppins.className + ""}>
+        <div className="max-w-4xl mx-5 flex flex-col min-h-screen">
           <NavBar />
           <div className="flex-grow">{children}</div>
           <Footer />

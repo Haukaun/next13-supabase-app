@@ -8,8 +8,6 @@ export default async function AdminPage() {
 
   let { data: session } = await supabase.auth.getSession();
 
-  console.log(session.session?.user.id);
-
   const { data: user } = await supabase
     .from("profiles")
     .select("*")

@@ -1,23 +1,34 @@
 "use client";
 
-import supabase from "@/lib/supabaselib/supabase-browser";
+import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import React, { useState } from "react";
 
 interface Props {
-  blogPostId: number;
+  blogId: number;
 }
 
-export const BlogItemCreateModal = ({ blogPostId }: Props) => {
-  const [blogItem, setBlogItem] = useState({
-    title: "",
-    subTitle: "",
-    content: "",
-    urlPath: "",
-    subContent: "",
-    image: "/testimage.jpeg",
-  });
+interface BlogPostItem {
+  title: string;
+  content: string;
+  image: string;
+  subTitle: string;
+  url_path: string;
+  subContent: string;
+}
 
-  console.log(blogPostId);
+const initialState = {
+  title: "",
+  content: "",
+  image: "/testimage.jpeg",
+  subTitle: "",
+  url_path: "",
+  subContent: "",
+};
+
+export default function BlogItemCreateModal({ blogId }: Props) {
+  const [blogItem, setBlogItem] = useState<BlogPostItem>(initialState);
+
+  const [supabase] = useState(() => supabaseclient);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -30,20 +41,26 @@ export const BlogItemCreateModal = ({ blogPostId }: Props) => {
       !blogItem.title ||
       !blogItem.subTitle ||
       !blogItem.content ||
-      !blogItem.urlPath ||
+      !blogItem.url_path ||
       !blogItem.subContent
     )
       return;
 
-    await supabase
-      .from("blog_post_item") // replace this with the correct table name in your database
-      .insert([
-        {
-          ...blogItem,
-          blogPost: blogPostId,
-        },
-      ])
-      .single();
+    try {
+      const { error } = await supabase
+        .from("blog_post_item")
+        .insert([{ ...blogItem, blogPostId: blogId }])
+        .single();
+
+      console.log(blogItem);
+
+      if (error) {
+        // handle error, for example by setting an error message in your state
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -121,10 +138,10 @@ export const BlogItemCreateModal = ({ blogPostId }: Props) => {
                   Link:
                   <input
                     type="text"
-                    name="urlPath"
+                    name="url_path"
                     required
                     className="rounded-md p-2 mt-2 w-full border"
-                    value={blogItem.urlPath}
+                    value={blogItem.url_path}
                     onChange={handleChange}
                   />
                 </label>
@@ -141,4 +158,4 @@ export const BlogItemCreateModal = ({ blogPostId }: Props) => {
       </div>
     </div>
   );
-};
+}

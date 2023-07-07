@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { BlogItemCreateModal } from "../modal/BlogItemCreateModal";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import { BlogPost } from "@/lib/interface";
+import BlogItemCreateModal from "../modal/BlogItemCreateModal";
 
 interface Props {
   blogPost: BlogPost;
@@ -45,7 +45,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
           <a href={"/admin/blogItems/" + blogPost.id} className="btn">
             Items: {}
           </a>
-          <BlogItemCreateModal blogPostId={blogPost.id} />
+          <BlogItemCreateModal blogId={blogPost.id} />
         </div>
         <button onClick={deleteBlogPost} className="btn btn-error">
           <svg
