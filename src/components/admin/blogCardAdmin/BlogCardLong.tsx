@@ -4,6 +4,7 @@ import { useState } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import { BlogPost } from "@/lib/interface";
 import BlogItemCreateModal from "../modal/BlogItemCreateModal";
+import BlogEditModal from "../modal/BlogEditModal";
 
 interface Props {
   blogPost: BlogPost;
@@ -47,6 +48,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
           </a>
           <BlogItemCreateModal blogId={blogPost.id} />
         </div>
+        <BlogEditModal blogPostProps={blogPost} />
         <button onClick={deleteBlogPost} className="btn btn-error">
           <svg
             xmlns="http://www.w3.org/2000/svg"

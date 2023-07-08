@@ -29,17 +29,18 @@ export default function BlogEditModal({ blogPostProps }: BlogModalProps) {
 
   const modalId = `my_blogpost_modal_${blogPost.id}`;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     try {
-      await supabase.from("blog_post").update({
-        title: blogPost.title,
-        subTitle: blogPost.subTitle,
-        content: blogPost.content,
-        slug: blogPost.slug,
-        metaDesc: blogPost.metaDesc,
-      });
+      await supabase
+        .from("blog_post")
+        .update({
+          title: blogPost.title,
+          subTitle: blogPost.subTitle,
+          content: blogPost.content,
+          slug: blogPost.slug,
+          metaDesc: blogPost.metaDesc,
+        })
+        .eq("id", blogPost.id);
     } catch (error) {
       console.log(error);
     }
