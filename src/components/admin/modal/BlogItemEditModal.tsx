@@ -3,44 +3,47 @@
 import React, { useState } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
 
-type BlogPost = {
+type BlogPostItem = {
   id: number;
   title: string;
   content: string;
   subTitle: string;
-  slug: string;
-  metaDesc: string;
+  subContent: string;
+  url_path: string;
 };
 
-type BlogModalProps = {
-  blogPostProps: BlogPost;
+type BlogModalItemProps = {
+  blogPostItemProps: BlogPostItem;
 };
 
-export default function BlogEditModal({ blogPostProps }: BlogModalProps) {
-  const [blogPost, setblogPost] = useState<BlogPost>(blogPostProps);
+export default function BlogEditModal({
+  blogPostItemProps,
+}: BlogModalItemProps) {
+  const [blogPostItem, setblogPostItem] =
+    useState<BlogPostItem>(blogPostItemProps);
 
   const [supabase] = useState(() => supabaseclient);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setblogPost({ ...blogPost, [e.target.name]: e.target.value });
+    setblogPostItem({ ...blogPostItem, [e.target.name]: e.target.value });
   };
 
-  const modalId = `my_blogpost_modal_${blogPost.slug}`;
+  const modalId = `my_blogpost_modal_${blogPostItem.id}`;
 
   const handleSubmit = async () => {
     try {
       await supabase
-        .from("blog_post")
+        .from("blog_post_item")
         .update({
-          title: blogPost.title,
-          subTitle: blogPost.subTitle,
-          content: blogPost.content,
-          slug: blogPost.slug,
-          metaDesc: blogPost.metaDesc,
+          title: blogPostItem.title,
+          content: blogPostItem.content,
+          subTitle: blogPostItem.subTitle,
+          subContent: blogPostItem.subContent,
+          url_path: blogPostItem.url_path,
         })
-        .eq("id", blogPost.id);
+        .eq("id", blogPostItem.id);
     } catch (error) {
       console.log(error);
     }
@@ -76,22 +79,22 @@ export default function BlogEditModal({ blogPostProps }: BlogModalProps) {
                 className="flex flex-col space-y-4 w-full"
               >
                 <label>
-                  Slug:
+                  Title:
                   <input
                     type="text"
                     name="slug"
                     className="rounded-md p-2 mt-2 w-full border"
-                    placeholder={blogPost.slug}
+                    placeholder={blogPostItem.title}
                     onChange={handleChange}
                   />
                 </label>
                 <label>
-                  Title:
+                  Content:
                   <input
                     type="text"
                     name="title"
                     className="rounded-md p-2 mt-2 w-full border"
-                    placeholder={blogPost.title}
+                    placeholder={blogPostItem.content}
                     onChange={handleChange}
                   />
                 </label>
@@ -101,26 +104,26 @@ export default function BlogEditModal({ blogPostProps }: BlogModalProps) {
                     type="text"
                     name="subTitle"
                     className="rounded-md p-2 mt-2 w-full border"
-                    placeholder={blogPost.subTitle}
+                    placeholder={blogPostItem.subTitle}
                     onChange={handleChange}
                   />
                 </label>
                 <label>
-                  Content:
+                  Sub-Content:
                   <textarea
                     name="content"
                     className="rounded-md p-2 mt-2 w-full h-40 border"
-                    placeholder={blogPost.content}
+                    placeholder={blogPostItem.subContent}
                     onChange={handleChange}
                   />
                 </label>
                 <label>
-                  MetaDescription:
+                  URL:
                   <input
                     type="text"
                     name="title"
                     className="rounded-md p-2 mt-2 w-full border"
-                    placeholder={blogPost.metaDesc}
+                    placeholder={blogPostItem.url_path}
                     onChange={handleChange}
                   />
                 </label>

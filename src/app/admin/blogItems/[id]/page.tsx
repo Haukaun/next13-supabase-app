@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import BlogItemCard from "@/components/admin/blogItemCard/BlogItemCard";
+import { BlogPostItem } from "@/lib/interface";
 
 interface Props {
   params: {
@@ -10,27 +11,38 @@ interface Props {
   };
 }
 
-const BlogPostItemPage = async ({ params }: Props) => {
+const BlogPostItemPage = ({ params }: Props) => {
+  const [blogPostItems, setBlogPostItems] = useState<BlogPostItem[]>([]);
   const [supabase] = useState(() => supabaseclient);
-  const { data: BlogPostItems, error } = await supabase
-    .from("blog_post_item")
-    .select("*")
-    .eq("blogPostId", params.id);
 
-  if (error) {
-    console.log(error);
-    return;
-  }
+  console.log(params.id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("blog_post_item")
+        .select("*")
+        .eq("blogPostId", params.id);
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      setBlogPostItems(data);
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="">
+    <div className="flex flex-col gap-2">
       <a href="/admin" className="hover:text-base-300 underline">
         {"<- back to Admin panel"}
       </a>
-      <h1>Blog Items</h1>
       <div className="flex justify-center items-center flex-col gap-3 w-full">
-        {BlogPostItems.map((blogItem) => (
-          <BlogItemCard blogPostItem={blogItem} />
+        {blogPostItems.map((blogItem, index) => (
+          <BlogItemCard key={index} blogPostItem={blogItem} />
         ))}
       </div>
     </div>

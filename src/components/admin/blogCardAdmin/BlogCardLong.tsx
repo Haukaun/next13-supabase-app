@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
-import { BlogPost } from "@/lib/interface";
+import { BlogPost, BlogPostItem } from "@/lib/interface";
 import BlogItemCreateModal from "../modal/BlogItemCreateModal";
 import BlogEditModal from "../modal/BlogEditModal";
 
@@ -44,7 +44,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
       <div className="card-actions md:flex md:justify-center justify-center my-4 items-center md:px-4">
         <div className="flex gap-2 border rounded p-1">
           <a href={"/admin/blogItems/" + blogPost.id} className="btn">
-            Items: {}
+            Items: {0}
           </a>
           <BlogItemCreateModal blogId={blogPost.id} />
         </div>

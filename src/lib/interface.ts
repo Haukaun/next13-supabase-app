@@ -12,7 +12,7 @@ export interface BlogPostItem {
   blogpostId: number;
   image: string | null;
   subTitle: string;
-  urlPath: string;
+  url_path: string;
   subContent: string;
 }
 

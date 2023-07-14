@@ -1,6 +1,7 @@
 import { BlogPostItem } from "@/lib/interface";
 import React, { useState } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
+import BlogItemEditModal from "../modal/BlogItemEditModal";
 
 interface Props {
   blogPostItem: BlogPostItem;
@@ -39,6 +40,7 @@ export default function BlogItemCard({ blogPostItem }: Props) {
           <p>{blogPostItem.subTitle}</p>
         </div>
         <div className="card-actions  md:justify-center justify-center my-4 items-center md:px-4">
+          <BlogItemEditModal blogPostItemProps={blogPostItem} />
           <button onClick={deleteBlogPostItem} className="btn btn-error">
             <svg
               xmlns="http://www.w3.org/2000/svg"
