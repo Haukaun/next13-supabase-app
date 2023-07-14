@@ -25,20 +25,20 @@ export default function BlogItemCard({ blogPostItem }: Props) {
   if (isDeleted) return null;
 
   return (
-    <div className="card card-side bg-base-100 shadow-xl w-full">
-      <figure className="relative">
+    <div className="card card-side shadow-xl flex-col md:flex-row">
+      <figure className="w-full md:w-1/4">
         <img
-          className="w-64 h-32 object-cover object-center"
+          className="object-cover object-center w-full h-full rounded"
           src={blogPostItem.image || "/testimage.jpeg"}
           alt="Movie"
         />
       </figure>
-      <div className="card-body items-center flex-row">
+      <div className="card-body flex-1 flex-row items-start justify-center md:px-4">
         <div className="flex-1 max-w-4xl">
           <h2 className="card-title">{blogPostItem.title}</h2>
           <p>{blogPostItem.subTitle}</p>
         </div>
-        <div className="card-actions justify-end">
+        <div className="card-actions  md:justify-center justify-center my-4 items-center md:px-4">
           <button onClick={deleteBlogPostItem} className="btn btn-error">
             <svg
               xmlns="http://www.w3.org/2000/svg"

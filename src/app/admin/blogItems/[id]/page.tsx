@@ -24,16 +24,14 @@ const BlogPostItemPage = async ({ params }: Props) => {
 
   return (
     <div className="">
-      <div className="flex justify-center items-center flex-col gap-3">
-        <a href="/admin" className="hover:text-base-300 underline">
-          {"<- back to Admin panel"}
-        </a>
-        <h1>Blog Items</h1>
-        <div className="w-full">
-          {BlogPostItems.map((blogItem) => (
-            <BlogItemCard blogPostItem={blogItem} />
-          ))}
-        </div>
+      <a href="/admin" className="hover:text-base-300 underline">
+        {"<- back to Admin panel"}
+      </a>
+      <h1>Blog Items</h1>
+      <div className="flex justify-center items-center flex-col gap-3 w-full">
+        {BlogPostItems.map((blogItem) => (
+          <BlogItemCard blogPostItem={blogItem} />
+        ))}
       </div>
     </div>
   );

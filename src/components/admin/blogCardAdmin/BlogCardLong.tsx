@@ -41,7 +41,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
           <p>{blogPost.subTitle}</p>
         </div>
       </div>
-      <div className="card-actions  md:flex md:justify-center justify-center my-4 items-center md:px-4">
+      <div className="card-actions md:flex md:justify-center justify-center my-4 items-center md:px-4">
         <div className="flex gap-2 border rounded p-1">
           <a href={"/admin/blogItems/" + blogPost.id} className="btn">
             Items: {}
