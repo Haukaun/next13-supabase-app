@@ -43,7 +43,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
       </div>
       <div className="card-actions  md:flex md:justify-center justify-center my-4 items-center md:px-4">
         <div className="flex gap-2 border rounded p-1">
-          <a href={"/blogItems/" + blogPost.id} className="btn">
+          <a href={"/admin/blogItems/" + blogPost.id} className="btn">
             Items: {}
           </a>
           <BlogItemCreateModal blogId={blogPost.id} />

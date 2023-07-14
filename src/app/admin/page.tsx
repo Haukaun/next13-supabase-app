@@ -21,7 +21,7 @@ export default async function AdminPage() {
 
   if (user?.role === "ADMIN") {
     return (
-      <div className="w-full">
+      <div className="">
         <div className="flex justify-start pb-10">
           <BlogCreateModal />
         </div>
