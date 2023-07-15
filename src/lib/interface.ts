@@ -9,7 +9,7 @@ export interface BlogPostItem {
   id: number;
   title: string;
   content: string;
-  blogpostId: number;
+  blogPostId: number;
   image: string | null;
   subTitle: string;
   url_path: string;
@@ -23,8 +23,8 @@ export interface BlogPost {
   metaDesc: string;
   published: boolean;
   slug: string;
-  userId: number;
-  createdAt: Date;
+  user: User;
+  created_at: Date;
   image: string | null;
   subTitle: string;
 }
