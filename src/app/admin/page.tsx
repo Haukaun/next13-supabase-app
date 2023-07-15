@@ -22,10 +22,10 @@ export default async function AdminPage() {
   if (user?.role === "ADMIN") {
     return (
       <div className="">
-        <div className="flex justify-start pb-10">
+        <div className="flex justify-start py-10">
           <BlogCreateModal />
         </div>
-        <div className="flex justify-center items-center flex-col gap-3 w-full">
+        <div className="flex justify-center items-center flex-col gap-3">
           {blogPosts?.map((blogPost) => (
             <BlogCardLong blogPost={blogPost} />
           ))}

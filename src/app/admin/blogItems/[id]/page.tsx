@@ -15,8 +15,6 @@ const BlogPostItemPage = ({ params }: Props) => {
   const [blogPostItems, setBlogPostItems] = useState<BlogPostItem[]>([]);
   const [supabase] = useState(() => supabaseclient);
 
-  console.log(params.id);
-
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
@@ -40,7 +38,7 @@ const BlogPostItemPage = ({ params }: Props) => {
       <a href="/admin" className="hover:text-base-300 underline">
         {"<- back to Admin panel"}
       </a>
-      <div className="flex justify-center items-center flex-col gap-3 w-full">
+      <div className="flex justify-center items-center flex-col gap-3">
         {blogPostItems.map((blogItem, index) => (
           <BlogItemCard key={index} blogPostItem={blogItem} />
         ))}
