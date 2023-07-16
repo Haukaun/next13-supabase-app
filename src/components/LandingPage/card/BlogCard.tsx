@@ -17,7 +17,7 @@ const BlogCard = ({ blogPost }: BlogCardProps) => {
         <div className="mt-auto">
           <a
             href={slug}
-            className=" bg-white bg-opacity-60 py-1 px-4 rounded-md text-black"
+            className="bg-primary py-1 px-4 rounded-md text-white font-bold"
           >
             READ
           </a>

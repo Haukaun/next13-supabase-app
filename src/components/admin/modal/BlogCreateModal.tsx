@@ -119,6 +119,16 @@ export default function BlogCreateModal() {
                     onChange={handleChange}
                   />
                 </label>
+                <label>
+                  Image:
+                  <input
+                    name="image"
+                    required
+                    type="file"
+                    className="file-input file-input-bordered w-full"
+                  />
+                </label>
+
                 <input type="submit" value="Submit" className="btn" />
               </form>
             </div>
