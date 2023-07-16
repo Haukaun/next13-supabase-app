@@ -1,28 +1,31 @@
 import React from "react";
+import createclient from "@/lib/supabaselib/supabase-server";
+import BlogCard from "./card/BlogCard";
 
-export default function MasonryGrid() {
+export default async function MasonryGrid() {
+  const supabase = createclient();
+
+  //get the newest 10 blogposts
+  const { data: blogs, error } = await supabase
+    .from("blog_post")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.log(error);
+    return <div>Failed to load</div>;
+  }
+
   return (
     <div>
-      <div className="columns-2 md:columns-3 lg:columns-4">
-        <img className="mb-4" src="https://source.unsplash.com/random/1" />
-        <img className="mb-4" src="https://source.unsplash.com/random/2" />
-        <img className="mb-4" src="https://source.unsplash.com/random/3" />
-        <img className="mb-4" src="https://source.unsplash.com/random/4" />
-        <img className="mb-4" src="https://source.unsplash.com/random/5" />
-        <img className="mb-4" src="https://source.unsplash.com/random/6" />
-        <img className="mb-4" src="https://source.unsplash.com/random/7" />
-        <img className="mb-4" src="https://source.unsplash.com/random/8" />
-        <img className="mb-4" src="https://source.unsplash.com/random/10" />
-        <img className="mb-4" src="https://source.unsplash.com/random/11" />
-        <img className="mb-4" src="https://source.unsplash.com/random/12" />
-        <img className="mb-4" src="https://source.unsplash.com/random/13" />
-        <img className="mb-4" src="https://source.unsplash.com/random/14" />
-        <img className="mb-4" src="https://source.unsplash.com/random/15" />
-        <img className="mb-4" src="https://source.unsplash.com/random/16" />
-        <img className="mb-4" src="https://source.unsplash.com/random/17" />
-        <img className="mb-4" src="https://source.unsplash.com/random/18" />
-        <img className="mb-4" src="https://source.unsplash.com/random/19" />
-        <img className="mb-4" src="https://source.unsplash.com/random/20" />
+      <h1 className="flex items-center justify-center pb-10 text-3xl font-bold">
+        Latest posts
+      </h1>
+      <div className="sm:columns-2 md:columns-3">
+        {blogs.map((blog, index) => (
+          <BlogCard key={index} blogPost={blog} />
+        ))}
       </div>
     </div>
   );

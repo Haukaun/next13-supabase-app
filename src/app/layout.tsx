@@ -31,7 +31,7 @@ export default function RootLayout({
           <div className="mx-8 w-full">
             <NavBar />
           </div>
-          <div className="flex-grow mx-8 w-full">{children}</div>
+          <div className="flex-grow mx-10">{children}</div>
           <div className="mx-8 w-full">
             <Footer />
           </div>

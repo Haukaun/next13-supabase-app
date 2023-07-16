@@ -14,7 +14,7 @@ export default function HeroPage() {
             insights and diverse perspectives. Start your reading journey with
             us today.
           </p>
-          <button className="btn btn-primary mb-24">Dive In</button>
+          <button className="btn btn-primary mb-24 text-white">Dive In</button>
         </div>
       </div>
     </div>

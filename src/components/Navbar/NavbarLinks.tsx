@@ -27,9 +27,6 @@ export default function NavbarLinks() {
           <a href="#" className="hover:bg-gray-400 rounded py-2 px-4 mx-2">
             Gifts
           </a>
-          <a href="#" className="hover:bg-gray-400 rounded py-2 px-4 mx-2">
-            Cloths
-          </a>
         </div>
       </div>
     </div>
