@@ -22,6 +22,10 @@ const BlogCardLong = ({ blogPost }: Props) => {
     setIsDeleted(true);
   };
 
+  const filepath = blogPost.image;
+
+  const { data } = supabase.storage.from("images").getPublicUrl(`${filepath}`);
+
   if (isDeleted) return null;
 
   return (
@@ -30,17 +34,19 @@ const BlogCardLong = ({ blogPost }: Props) => {
         <a href={"/" + blogPost.slug}>
           <img
             className="object-cover object-center w-full h-full rounded"
-            src={blogPost.image || "/testimage.jpeg"}
-            alt="Movie"
+            src={data.publicUrl || "/testimage.jpeg"}
+            alt={blogPost.title}
           />
         </a>
       </figure>
+
       <div className="card-body flex-1 flex flex-col items-start justify-center md:px-4">
         <div className="max-w-4xl">
           <h2 className="card-title">{blogPost.title}</h2>
           <p>{blogPost.subTitle}</p>
         </div>
       </div>
+
       <div className="card-actions md:flex md:justify-center justify-center my-4 items-center md:px-4">
         <div className="flex gap-2 border rounded p-1">
           <a href={"/admin/blogItems/" + blogPost.id} className="btn">
