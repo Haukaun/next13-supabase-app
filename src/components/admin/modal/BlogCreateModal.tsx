@@ -1,7 +1,7 @@
 "use client";
 
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 
 interface BlogPost {
   title: string;
@@ -9,42 +9,66 @@ interface BlogPost {
   content: string;
   metaDesc: string;
   slug: string;
-  image: string;
+  image: File | null;
 }
 
-const initialState = {
+const initialState: BlogPost = {
   title: "",
   subTitle: "",
   content: "",
   metaDesc: "",
   slug: "",
-  image: "/testimage.jpeg",
+  image: null,
 };
 
 export default function BlogCreateModal() {
   const [blogPost, setBlogPost] = useState<BlogPost>(initialState);
-
   const [supabase] = useState(() => supabaseclient);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const handleTextChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setBlogPost({ ...blogPost, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setBlogPost({ ...blogPost, image: e.target.files[0] });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (
       !blogPost.title ||
       !blogPost.subTitle ||
       !blogPost.content ||
       !blogPost.metaDesc ||
-      !blogPost.slug
+      !blogPost.slug ||
+      !blogPost.image
     )
       return;
+
+    const file = blogPost.image;
+    const filePath = `blogPost/${blogPost.slug}/${file.name}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("images")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.log(uploadError);
+      return;
+    }
+
     const { data: session } = await supabase.auth.getSession();
+
     await supabase
       .from("blog_post")
-      .insert([{ ...blogPost, user: session.session?.user.id }])
+      .insert([
+        { ...blogPost, user: session.session?.user.id, image: filePath },
+      ])
       .single();
   };
 
@@ -73,7 +97,7 @@ export default function BlogCreateModal() {
                     required
                     className="rounded-md p-2 mt-2 w-full border"
                     value={blogPost.slug}
-                    onChange={handleChange}
+                    onChange={handleTextChange}
                   />
                 </label>
                 <label>
@@ -84,7 +108,7 @@ export default function BlogCreateModal() {
                     required
                     className="rounded-md p-2 mt-2 w-full border"
                     value={blogPost.title}
-                    onChange={handleChange}
+                    onChange={handleTextChange}
                   />
                 </label>
                 <label>
@@ -95,7 +119,7 @@ export default function BlogCreateModal() {
                     required
                     className="rounded-md p-2 mt-2 w-full border"
                     value={blogPost.metaDesc}
-                    onChange={handleChange}
+                    onChange={handleTextChange}
                   />
                 </label>
                 <label>
@@ -106,7 +130,7 @@ export default function BlogCreateModal() {
                     required
                     className="rounded-md p-2 mt-2 w-full border"
                     value={blogPost.subTitle}
-                    onChange={handleChange}
+                    onChange={handleTextChange}
                   />
                 </label>
                 <label>
@@ -116,7 +140,7 @@ export default function BlogCreateModal() {
                     required
                     className="rounded-md p-2 mt-2 w-full h-40 border"
                     value={blogPost.content}
-                    onChange={handleChange}
+                    onChange={handleTextChange}
                   />
                 </label>
                 <label>
@@ -126,6 +150,7 @@ export default function BlogCreateModal() {
                     required
                     type="file"
                     className="file-input file-input-bordered w-full"
+                    onChange={handleImageChange}
                   />
                 </label>
 

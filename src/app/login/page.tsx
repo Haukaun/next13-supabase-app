@@ -9,7 +9,7 @@ export default function Login() {
   const [supabase] = useState(() => supabaseclient);
 
   return (
-    <div className="m-auto px-8 sm:max-w-md gap-2">
+    <div className="w-full">
       <a className="underline hover:font-medium" href="/">
         {"Go to main page"}
       </a>
