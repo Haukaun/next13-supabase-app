@@ -1,14 +1,25 @@
 import { BlogPost } from "@/lib/interface";
+import createclient from "@/lib/supabaselib/supabase-server";
 
 interface BlogCardProps {
   blogPost: BlogPost;
 }
 
 const BlogCard = ({ blogPost }: BlogCardProps) => {
-  const { title, subTitle, slug, image } = blogPost;
+  const { title, subTitle, slug } = blogPost;
+
+  const supabase = createclient();
+
+  const filepath = blogPost.image;
+
+  const { data } = supabase.storage.from("images").getPublicUrl(`${filepath}`);
+
   return (
     <div className="relative mb-4 before:content-[''] before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20">
-      <img className="w-full rounded-md" src={image || "/testimage.jpeg"} />
+      <img
+        className="w-full rounded-md max-h-96"
+        src={data.publicUrl || "/testimage.jpeg"}
+      />
       <div className="absolute inset-0 p-8 text-white flex flex-col">
         <div className="relative">
           <h1 className="text-3xl font-bold">{title}</h1>

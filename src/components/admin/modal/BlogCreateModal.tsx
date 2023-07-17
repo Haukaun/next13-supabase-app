@@ -50,6 +50,10 @@ export default function BlogCreateModal() {
     )
       return;
 
+    console.log(blogPost);
+
+    const { image, ...rest } = blogPost;
+
     const file = blogPost.image;
     const filePath = `blogPost/${blogPost.slug}/${file.name}`;
 
@@ -64,12 +68,17 @@ export default function BlogCreateModal() {
 
     const { data: session } = await supabase.auth.getSession();
 
-    await supabase
+    console.log(session);
+
+    const { data, error } = await supabase
       .from("blog_post")
-      .insert([
-        { ...blogPost, user: session.session?.user.id, image: filePath },
-      ])
+      .insert([{ ...rest, user: session.session?.user.id, image: filePath }])
       .single();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
   };
 
   return (

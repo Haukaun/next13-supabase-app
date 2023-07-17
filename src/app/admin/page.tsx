@@ -25,9 +25,11 @@ export default async function AdminPage() {
         <div className="flex justify-start py-10">
           <BlogCreateModal />
         </div>
-        <div className="flex justify-center items-center flex-col gap-3">
+        <div className="flex justify-center items-center flex-col gap-4">
           {blogPosts?.map((blogPost) => (
-            <BlogCardLong blogPost={blogPost} />
+            <div className="w-full">
+              <BlogCardLong blogPost={blogPost} />
+            </div>
           ))}
         </div>
       </div>
