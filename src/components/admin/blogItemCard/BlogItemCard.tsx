@@ -19,7 +19,28 @@ export default function BlogItemCard({ blogPostItem }: Props) {
       return;
     }
 
-    await supabase.from("blog_post_item").delete().eq("id", blogPostItem.id);
+    if (blogPostItem.image) {
+      const { error: deleteImageError } = await supabase.storage
+        .from("images")
+        .remove([blogPostItem.image]);
+
+      if (deleteImageError) {
+        console.log("Error deleting image:", deleteImageError);
+        return;
+      }
+    }
+
+    // If image deletion was successful, delete the item
+    const { error: deleteItemError } = await supabase
+      .from("blog_post_item")
+      .delete()
+      .eq("id", blogPostItem.id);
+
+    if (deleteItemError) {
+      console.log("Error deleting blog post:", deleteItemError);
+      return;
+    }
+
     setIsDeleted(true);
   }
 

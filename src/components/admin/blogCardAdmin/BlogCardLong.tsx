@@ -14,28 +14,63 @@ const BlogCardLong = ({ blogPost }: Props) => {
   const [isDeleted, setIsDeleted] = useState(false);
   const [supabase] = useState(() => supabaseclient);
 
+  const filePathBlogPost = blogPost.image;
+
+  const { data } = supabase.storage
+    .from("images")
+    .getPublicUrl(`${filePathBlogPost}`);
+
   const deleteBlogPost = async () => {
     if (!window.confirm("Are you sure you want to delete this blog post?")) {
       return;
     }
 
+    if (blogPost.image) {
+      // Attempt to delete the blogPost image first
+      const { error: deleteImageError } = await supabase.storage
+        .from("images")
+        .remove([blogPost.image]);
+
+      if (deleteImageError) {
+        console.log("Error deleting image:", deleteImageError);
+        return;
+      }
+
+      // List all files in the directory
+      const { data: fileList, error: listError } = await supabase.storage
+        .from("images")
+        .list("blogPostItem/" + blogPost.id);
+
+      if (listError) {
+        console.log("Error listing files:", listError);
+        return;
+      }
+
+      // Delete each file in the directory
+      for (let file of fileList) {
+        const { error: deleteFileError } = await supabase.storage
+          .from("images")
+          .remove(["blogPostItem/" + blogPost.id + "/" + file.name]);
+        if (deleteFileError) {
+          console.log("Error deleting file:", deleteFileError);
+          return;
+        }
+      }
+    }
+
+    // If image deletion was successful, delete the blog post
     const { error: deletePostError } = await supabase
       .from("blog_post")
       .delete()
       .eq("id", blogPost.id);
 
     if (deletePostError) {
-      console.error("Error deleting blog post:", deletePostError);
+      console.log("Error deleting blog post:", deletePostError);
       return;
     }
 
     setIsDeleted(true);
   };
-  //how many items are in this blog post?
-
-  const filepath = blogPost.image;
-
-  const { data } = supabase.storage.from("images").getPublicUrl(`${filepath}`);
 
   if (isDeleted) return null;
 

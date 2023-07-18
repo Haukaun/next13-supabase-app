@@ -19,8 +19,8 @@ export default function BlogItemCard({ blogPostItem }: BlogPostItemProps) {
           <img
             src={data.publicUrl}
             alt="Movie"
-            className="object-fit object-center w-full h-full rounded border-r max-h-96"
-            style={{ minHeight: "11rem", objectFit: "cover" }}
+            className="object-cover object-center w-full h-full rounded border-r max-h-64"
+            style={{ minHeight: "16rem" }}
           />
         </figure>
         <div className="card-body w-full md:w-0 flex-rox sm:flex-col items-start justify-start">
