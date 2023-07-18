@@ -15,13 +15,14 @@ const BlogCard = ({ blogPost }: BlogCardProps) => {
   const { data } = supabase.storage.from("images").getPublicUrl(`${filepath}`);
 
   return (
-    <div className="relative mb-4 before:content-[''] before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20">
+    <div className="relative mb-4  before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20 max-w-sm mx-auto">
       <img
         className="w-full rounded-md max-h-96"
         src={data.publicUrl || "/testimage.jpeg"}
+        style={{ minHeight: "11rem", objectFit: "cover" }}
       />
-      <div className="absolute inset-0 p-8 text-white flex flex-col">
-        <div className="relative">
+      <div className="absolute inset-0 p-5 text-white flex flex-col">
+        <div className="relative p-2">
           <h1 className="text-3xl font-bold">{title}</h1>
           <p className="font-sm font-light">{subTitle}</p>
         </div>

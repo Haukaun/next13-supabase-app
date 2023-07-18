@@ -1,8 +1,8 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
-import { BlogPost, BlogPostItem } from "@/lib/interface";
+import { BlogPost } from "@/lib/interface";
 import BlogItemCreateModal from "../modal/BlogItemCreateModal";
 import BlogEditModal from "../modal/BlogEditModal";
 
@@ -18,9 +18,45 @@ const BlogCardLong = ({ blogPost }: Props) => {
     if (!window.confirm("Are you sure you want to delete this blog post?")) {
       return;
     }
-    await supabase.from("blog_post").delete().eq("id", blogPost.id);
+
+    // Get a list of all objects in the folder
+    const folderPrefix = `blogPost/${blogPost.slug}`; // this will target the folder specific to the blog post
+
+    const { data: fileList, error: listError } = await supabase.storage
+      .from("images")
+      .list(folderPrefix);
+
+    if (listError) {
+      console.error("Error listing files:", listError);
+      return;
+    }
+
+    // Extract the paths of the objects to delete
+    const filesToDelete = fileList.map((file) => file.name);
+
+    // Delete the objects
+    const { error: deleteError } = await supabase.storage
+      .from("images")
+      .remove(filesToDelete);
+
+    if (deleteError) {
+      console.error("Error deleting files:", deleteError);
+      return;
+    }
+
+    const { error: deletePostError } = await supabase
+      .from("blog_post")
+      .delete()
+      .eq("id", blogPost.id);
+
+    if (deletePostError) {
+      console.error("Error deleting blog post:", deletePostError);
+      return;
+    }
+
     setIsDeleted(true);
   };
+  //how many items are in this blog post?
 
   const filepath = blogPost.image;
 
@@ -50,7 +86,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
       <div className="card-actions md:flex md:justify-center justify-center my-4 items-center md:px-4">
         <div className="flex gap-2 border rounded p-1">
           <a href={"/admin/blogItems/" + blogPost.id} className="btn">
-            Items: {0}
+            Items
           </a>
           <BlogItemCreateModal blogId={blogPost.id} />
         </div>

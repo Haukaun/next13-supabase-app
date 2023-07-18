@@ -1,6 +1,7 @@
 "use client";
 
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
+import { useRouter } from "next/navigation";
 import React, { useState, ChangeEvent } from "react";
 
 interface BlogPost {
@@ -24,6 +25,7 @@ const initialState: BlogPost = {
 export default function BlogCreateModal() {
   const [blogPost, setBlogPost] = useState<BlogPost>(initialState);
   const [supabase] = useState(() => supabaseclient);
+  const router = useRouter();
 
   const handleTextChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -37,9 +39,7 @@ export default function BlogCreateModal() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (
       !blogPost.title ||
       !blogPost.subTitle ||
@@ -57,6 +57,19 @@ export default function BlogCreateModal() {
     const file = blogPost.image;
     const filePath = `blogPost/${blogPost.slug}/${file.name}`;
 
+    const { data: session } = await supabase.auth.getSession();
+    console.log(session);
+
+    const { error: insertError } = await supabase
+      .from("blog_post")
+      .insert([{ ...rest, user: session.session?.user.id, image: filePath }])
+      .single();
+
+    if (insertError) {
+      console.log(insertError);
+      return;
+    }
+
     const { error: uploadError } = await supabase.storage
       .from("images")
       .upload(filePath, file);
@@ -66,19 +79,7 @@ export default function BlogCreateModal() {
       return;
     }
 
-    const { data: session } = await supabase.auth.getSession();
-
-    console.log(session);
-
-    const { data, error } = await supabase
-      .from("blog_post")
-      .insert([{ ...rest, user: session.session?.user.id, image: filePath }])
-      .single();
-
-    if (error) {
-      console.log(error);
-      return;
-    }
+    router.push("/admin");
   };
 
   return (
