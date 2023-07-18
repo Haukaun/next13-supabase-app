@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import supabase from "@/lib/supabaselib/supabase-browser";
 import BlogItemCard from "@/components/blogPost/BlogItemCard";
 import { BlogPost, BlogPostItem } from "@/lib/interface";

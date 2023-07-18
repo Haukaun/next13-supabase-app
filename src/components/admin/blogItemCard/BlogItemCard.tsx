@@ -1,3 +1,5 @@
+"use client";
+
 import { BlogPostItem } from "@/lib/interface";
 import React, { useState } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
