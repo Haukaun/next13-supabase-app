@@ -9,7 +9,7 @@ export default function BlogItemCard({ blogPostItem }: BlogPostItemProps) {
   return (
     <div>
       <h1 className="my-6 text-4xl font-bold">{blogPostItem.title}</h1>
-      <div className="card md:card-side card-compact bg-base-100 shadow-xl border flex-wrap justify-center items-center">
+      <div className="card md:card-side rounded card-compact bg-base-100 shadow-xl border flex-wrap justify-center items-center">
         <figure className="w-full md:w-1/3">
           <img src="/testimage.jpeg" alt="Movie" />
         </figure>

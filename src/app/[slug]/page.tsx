@@ -65,7 +65,7 @@ const BlogPostPage = ({ params }: Props) => {
       <img
         src={data.publicUrl || undefined}
         alt={state.post?.title}
-        className="w-full h-64 object-cover mt-4 rounded-lg border"
+        className="w-full h-64 object-cover mt-4 rounded border"
       />
       <h1 className="mt-6 text-5xl font-bold">{state.post?.title}</h1>
       <h2 className="mt-4 text-2xl">{state.post?.subTitle}</h2>

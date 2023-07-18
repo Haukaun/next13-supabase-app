@@ -1,25 +1,27 @@
 "use client";
 
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 interface Props {
   blogId: number;
 }
 
 interface BlogPostItem {
+  blogPostId: number;
   title: string;
   content: string;
-  image: string;
+  image: File | null;
   subTitle: string;
   url_path: string;
   subContent: string;
 }
 
 const initialState = {
+  blogPostId: 0,
   title: "",
   content: "",
-  image: "/testimage.jpeg",
+  image: null,
   subTitle: "",
   url_path: "",
   subContent: "",
@@ -36,27 +38,45 @@ export default function BlogItemCreateModal({ blogId }: Props) {
     setBlogItem({ ...blogItem, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setBlogItem({ ...blogItem, image: e.target.files[0] });
+    }
+  };
+
   const handleSubmit = async () => {
     if (
       !blogItem.title ||
       !blogItem.subTitle ||
       !blogItem.content ||
       !blogItem.url_path ||
-      !blogItem.subContent
+      !blogItem.subContent ||
+      !blogItem.image
     )
       return;
 
     try {
+      const { image, ...rest } = blogItem;
+
+      const file = blogItem.image;
+      const filePath = `blogPostItem/${blogItem.blogPostId}/${file.name}`;
+
       const { error } = await supabase
         .from("blog_post_item")
-        .insert([{ ...blogItem, blogPostId: blogId }])
+        .insert([{ ...rest, blogPostId: blogId, image: filePath }])
         .single();
 
-      console.log(blogItem);
-
       if (error) {
-        // handle error, for example by setting an error message in your state
         console.log(error);
+      }
+
+      const { error: uploadError } = await supabase.storage
+        .from("images")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.log(uploadError);
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -119,7 +139,7 @@ export default function BlogItemCreateModal({ blogId }: Props) {
                   <textarea
                     name="content"
                     required
-                    className="rounded-md p-2 mt-2 w-full h-40 border"
+                    className="rounded-md p-2 mt-2 w-full border"
                     value={blogItem.content}
                     onChange={handleChange}
                   />
@@ -129,7 +149,7 @@ export default function BlogItemCreateModal({ blogId }: Props) {
                   <textarea
                     name="subContent"
                     required
-                    className="rounded-md p-2 mt-2 w-full h-40 border"
+                    className="rounded-md p-2 mt-2 w-full border"
                     value={blogItem.subContent}
                     onChange={handleChange}
                   />
@@ -143,6 +163,16 @@ export default function BlogItemCreateModal({ blogId }: Props) {
                     className="rounded-md p-2 mt-2 w-full border"
                     value={blogItem.url_path}
                     onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  Image:
+                  <input
+                    name="image"
+                    required
+                    type="file"
+                    className="file-input file-input-bordered w-full"
+                    onChange={handleImageChange}
                   />
                 </label>
                 <input type="submit" value="Submit" className="btn" />

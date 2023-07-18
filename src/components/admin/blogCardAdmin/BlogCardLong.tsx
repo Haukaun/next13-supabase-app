@@ -19,31 +19,6 @@ const BlogCardLong = ({ blogPost }: Props) => {
       return;
     }
 
-    // Get a list of all objects in the folder
-    const folderPrefix = `blogPost/${blogPost.slug}`; // this will target the folder specific to the blog post
-
-    const { data: fileList, error: listError } = await supabase.storage
-      .from("images")
-      .list(folderPrefix);
-
-    if (listError) {
-      console.error("Error listing files:", listError);
-      return;
-    }
-
-    // Extract the paths of the objects to delete
-    const filesToDelete = fileList.map((file) => file.name);
-
-    // Delete the objects
-    const { error: deleteError } = await supabase.storage
-      .from("images")
-      .remove(filesToDelete);
-
-    if (deleteError) {
-      console.error("Error deleting files:", deleteError);
-      return;
-    }
-
     const { error: deletePostError } = await supabase
       .from("blog_post")
       .delete()

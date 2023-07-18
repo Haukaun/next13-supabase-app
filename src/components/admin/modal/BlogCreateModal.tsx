@@ -50,36 +50,37 @@ export default function BlogCreateModal() {
     )
       return;
 
-    console.log(blogPost);
+    try {
+      const { image, ...rest } = blogPost;
 
-    const { image, ...rest } = blogPost;
+      const file = blogPost.image;
+      const filePath = `blogPost/${blogPost.slug}/${file.name}`;
 
-    const file = blogPost.image;
-    const filePath = `blogPost/${blogPost.slug}/${file.name}`;
+      const { data: session } = await supabase.auth.getSession();
 
-    const { data: session } = await supabase.auth.getSession();
-    console.log(session);
+      const { error: insertError } = await supabase
+        .from("blog_post")
+        .insert([{ ...rest, user: session.session?.user.id, image: filePath }])
+        .single();
 
-    const { error: insertError } = await supabase
-      .from("blog_post")
-      .insert([{ ...rest, user: session.session?.user.id, image: filePath }])
-      .single();
+      if (insertError) {
+        console.log(insertError);
+        return;
+      }
 
-    if (insertError) {
-      console.log(insertError);
-      return;
+      const { error: uploadError } = await supabase.storage
+        .from("images")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.log(uploadError);
+        return;
+      }
+
+      router.push("/admin");
+    } catch (error) {
+      console.log(error);
     }
-
-    const { error: uploadError } = await supabase.storage
-      .from("images")
-      .upload(filePath, file);
-
-    if (uploadError) {
-      console.log(uploadError);
-      return;
-    }
-
-    router.push("/admin");
   };
 
   return (
