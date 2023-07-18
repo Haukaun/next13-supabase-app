@@ -40,7 +40,7 @@ const BlogCardLong = ({ blogPost }: Props) => {
   if (isDeleted) return null;
 
   return (
-    <div className="card card-side shadow-xl flex flex-col md:flex-row md:max-h-32 h-full border">
+    <div className="card card-side shadow-xl flex-col md:flex-row md:max-h-32 h-full border">
       <figure className="w-full md:w-1/4">
         <a href={"/" + blogPost.slug}>
           <img

@@ -59,7 +59,7 @@ export default function BlogItemCreateModal({ blogId }: Props) {
       const { image, ...rest } = blogItem;
 
       const file = blogItem.image;
-      const filePath = `blogPostItem/${blogItem.blogPostId}/${file.name}`;
+      const filePath = `blogPostItem/${blogId}/${file.name}`;
 
       const { error } = await supabase
         .from("blog_post_item")

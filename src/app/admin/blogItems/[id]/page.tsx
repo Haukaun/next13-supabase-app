@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import BlogItemCard from "@/components/admin/blogItemCard/BlogItemCard";
 import { BlogPostItem } from "@/lib/interface";
+import { disconnect } from "process";
 
 interface Props {
   params: {
@@ -38,9 +39,11 @@ const BlogPostItemPage = ({ params }: Props) => {
       <a href="/admin" className="hover:text-base-300 underline">
         {"<- back to Admin panel"}
       </a>
-      <div className="flex justify-center items-center flex-col gap-3">
+      <div className="flex justify-center items-center flex-col gap-4">
         {blogPostItems.map((blogItem, index) => (
-          <BlogItemCard key={index} blogPostItem={blogItem} />
+          <div className="w-full">
+            <BlogItemCard key={index} blogPostItem={blogItem} />
+          </div>
         ))}
       </div>
     </div>
