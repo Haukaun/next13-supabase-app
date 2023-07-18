@@ -18,7 +18,7 @@ const BlogCard = ({ blogPost }: BlogCardProps) => {
     <div className="relative mb-4  before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20 max-w-sm mx-auto">
       <img
         className="w-full rounded max-h-96"
-        src={data.publicUrl || "/testimage.jpeg"}
+        src={data.publicUrl}
         style={{ minHeight: "11rem", objectFit: "cover" }}
       />
       <div className="absolute inset-0 p-5 text-white flex flex-col">
