@@ -2,6 +2,7 @@
 
 import supabaseclient from "@/lib/supabaselib/supabase-browser";
 import React, { ChangeEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   blogId: number;
@@ -31,6 +32,8 @@ export default function BlogItemCreateModal({ blogId }: Props) {
   const [blogItem, setBlogItem] = useState<BlogPostItem>(initialState);
 
   const [supabase] = useState(() => supabaseclient);
+
+  const router = useRouter();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -80,6 +83,7 @@ export default function BlogItemCreateModal({ blogId }: Props) {
           return;
         }
       }, 2000);
+      router.push("/admin");
     } catch (error) {
       console.log(error);
     }

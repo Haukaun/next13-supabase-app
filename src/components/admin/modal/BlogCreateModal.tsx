@@ -62,11 +62,13 @@ export default function BlogCreateModal() {
 
       const { data: session } = await supabase.auth.getSession();
 
+      // Check if user is authenticated
       if (!session || !session.session?.user.id) {
         console.error("User is not authenticated");
         return;
       }
 
+      // Insert blog post into database
       const { error: insertError } = await supabase
         .from("blog_post")
         .insert([{ ...rest, user: session.session?.user.id, image: filePath }])
@@ -77,6 +79,7 @@ export default function BlogCreateModal() {
         return;
       }
 
+      // Upload image to storage
       setTimeout(async () => {
         const { error: uploadError } = await supabase.storage
           .from("images")
@@ -89,6 +92,7 @@ export default function BlogCreateModal() {
       }, 2000);
 
       router.push("/admin");
+      window.location.reload();
     } catch (error) {
       console.error("Error in handleSubmit:", error);
     }
