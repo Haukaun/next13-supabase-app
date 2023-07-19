@@ -6,7 +6,7 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ blogPost }: BlogCardProps) => {
-  const { title, subTitle, slug } = blogPost;
+  const { title, slug } = blogPost;
 
   const supabase = createclient();
 
@@ -17,14 +17,13 @@ const BlogCard = ({ blogPost }: BlogCardProps) => {
   return (
     <div className="relative mb-4  before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20 max-w-sm mx-auto">
       <img
-        className="w-full rounded max-h-96"
+        className="w-full rounded max-h-96 object-cover"
         src={data.publicUrl}
-        style={{ minHeight: "11rem", objectFit: "cover" }}
+        style={{ minHeight: "12rem" }}
       />
-      <div className="absolute inset-0 p-5 text-white flex flex-col">
+      <div className="absolute inset-0 p-4 text-white flex flex-col w-full">
         <div className="relative p-2">
-          <h1 className="text-3xl font-bold">{title}</h1>
-          <p className="font-sm font-light">{subTitle}</p>
+          <h1 className="text-2xl font-bold">{title}</h1>
         </div>
         <div className="mt-auto">
           <a

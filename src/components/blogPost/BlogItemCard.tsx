@@ -25,7 +25,7 @@ export default function BlogItemCard({ blogPostItem }: BlogPostItemProps) {
         </figure>
         <div className="card-body w-full md:w-0 flex-rox sm:flex-col items-start justify-start">
           <h2 className="card-title">{blogPostItem.subTitle}</h2>
-          <p className="max-w-sm">{blogPostItem.subContent}</p>
+          <p className="max-w-sm">{blogPostItem.content}</p>
           <div className="card-actions md:justify-end w-full">
             <a href={blogPostItem.url_path} className="btn btn-primary">
               Watch
@@ -33,7 +33,7 @@ export default function BlogItemCard({ blogPostItem }: BlogPostItemProps) {
           </div>
         </div>
       </div>
-      <p className="my-10">{blogPostItem.content}</p>
+      <p className="my-10">{blogPostItem.subContent}</p>
     </div>
   );
 }

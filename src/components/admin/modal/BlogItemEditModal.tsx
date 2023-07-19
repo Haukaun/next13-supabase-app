@@ -72,7 +72,7 @@ export default function BlogEditModal({
       <div className="modal">
         <div className="modal-box flex flex-col">
           <div className="flex flex-col">
-            <h3 className="font-bold text-lg pb-5">UPDATE BLOGPOST</h3>
+            <h3 className="font-bold text-lg pb-5">UPDATE BLOGITEM</h3>
             <div className="gap-10">
               <form
                 onSubmit={handleSubmit}
@@ -92,7 +92,7 @@ export default function BlogEditModal({
                   Content:
                   <input
                     type="text"
-                    name="title"
+                    name="content"
                     className="rounded-md p-2 mt-2 w-full border"
                     placeholder={blogPostItem.content}
                     onChange={handleChange}
@@ -111,17 +111,18 @@ export default function BlogEditModal({
                 <label>
                   Sub-Content:
                   <textarea
-                    name="content"
+                    name="subContent"
                     className="rounded-md p-2 mt-2 w-full h-40 border"
                     placeholder={blogPostItem.subContent}
                     onChange={handleChange}
                   />
                 </label>
+
                 <label>
                   URL:
                   <input
                     type="text"
-                    name="title"
+                    name="url"
                     className="rounded-md p-2 mt-2 w-full border"
                     placeholder={blogPostItem.url_path}
                     onChange={handleChange}

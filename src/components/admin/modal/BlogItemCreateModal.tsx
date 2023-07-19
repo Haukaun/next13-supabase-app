@@ -44,7 +44,8 @@ export default function BlogItemCreateModal({ blogId }: Props) {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (
       !blogItem.title ||
       !blogItem.subTitle ||

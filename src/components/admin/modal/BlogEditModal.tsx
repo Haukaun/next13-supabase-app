@@ -118,7 +118,7 @@ export default function BlogEditModal({ blogPostProps }: BlogModalProps) {
                   MetaDescription:
                   <input
                     type="text"
-                    name="title"
+                    name="metaDesc"
                     className="rounded-md p-2 mt-2 w-full border"
                     placeholder={blogPost.metaDesc}
                     onChange={handleChange}

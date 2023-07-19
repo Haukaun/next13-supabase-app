@@ -68,9 +68,11 @@ export default function BlogCreateModal() {
         return;
       }
 
-      const { error: uploadError } = await supabase.storage
+      const { data, error: uploadError } = await supabase.storage
         .from("images")
         .upload(filePath, file);
+
+      console.log(data);
 
       if (uploadError) {
         console.log(uploadError);
