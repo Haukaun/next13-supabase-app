@@ -25,6 +25,7 @@ const initialState: BlogPost = {
 export default function BlogCreateModal() {
   const [blogPost, setBlogPost] = useState<BlogPost>(initialState);
   const [supabase] = useState(() => supabaseclient);
+
   const router = useRouter();
 
   const handleTextChange = (
@@ -39,7 +40,8 @@ export default function BlogCreateModal() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (
       !blogPost.title ||
       !blogPost.subTitle ||
@@ -53,10 +55,17 @@ export default function BlogCreateModal() {
     try {
       const { image, ...rest } = blogPost;
 
+      console.log(blogPost.image);
+
       const file = blogPost.image;
       const filePath = `blogPost/${blogPost.slug}/${file.name}`;
 
       const { data: session } = await supabase.auth.getSession();
+
+      if (!session || !session.session?.user.id) {
+        console.error("User is not authenticated");
+        return;
+      }
 
       const { error: insertError } = await supabase
         .from("blog_post")
@@ -64,24 +73,24 @@ export default function BlogCreateModal() {
         .single();
 
       if (insertError) {
-        console.log(insertError);
+        console.error("Error inserting into database:", insertError);
         return;
       }
 
-      const { data, error: uploadError } = await supabase.storage
-        .from("images")
-        .upload(filePath, file);
+      setTimeout(async () => {
+        const { error: uploadError } = await supabase.storage
+          .from("images")
+          .upload(filePath, file);
 
-      console.log(data);
-
-      if (uploadError) {
-        console.log(uploadError);
-        return;
-      }
+        if (uploadError) {
+          console.error("Error uploading file to storage:", uploadError);
+          return;
+        }
+      }, 2000);
 
       router.push("/admin");
     } catch (error) {
-      console.log(error);
+      console.error("Error in handleSubmit:", error);
     }
   };
 

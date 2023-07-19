@@ -89,7 +89,6 @@ const BlogCardLong = ({ blogPost }: Props) => {
       <div className="card-body flex-1 flex flex-col items-start justify-center md:px-4">
         <div className="max-w-4xl">
           <h2 className="card-title">{blogPost.title}</h2>
-          <p>{blogPost.subTitle}</p>
         </div>
       </div>
 

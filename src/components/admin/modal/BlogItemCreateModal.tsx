@@ -70,15 +70,16 @@ export default function BlogItemCreateModal({ blogId }: Props) {
       if (error) {
         console.log(error);
       }
+      setTimeout(async () => {
+        const { error: uploadError } = await supabase.storage
+          .from("images")
+          .upload(filePath, file);
 
-      const { error: uploadError } = await supabase.storage
-        .from("images")
-        .upload(filePath, file);
-
-      if (uploadError) {
-        console.log(uploadError);
-        return;
-      }
+        if (uploadError) {
+          console.log(uploadError);
+          return;
+        }
+      }, 2000);
     } catch (error) {
       console.log(error);
     }

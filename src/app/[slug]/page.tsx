@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import supabase from "@/lib/supabaselib/supabase-browser";
 import BlogItemCard from "@/components/blogPost/BlogItemCard";
-import { BlogPost, BlogPostItem } from "@/lib/interface";
+import { BlogPost, BlogPostItem, User } from "@/lib/interface";
 
 interface Props {
   params: {
@@ -13,12 +13,14 @@ interface Props {
 
 interface State {
   post: BlogPost | null;
+  userProfile: User | null;
   blogItems: BlogPostItem[] | null;
 }
 
 const BlogPostPage = ({ params }: Props) => {
   const [state, setState] = useState<State>({
     post: null,
+    userProfile: null,
     blogItems: null,
   });
 
@@ -40,12 +42,18 @@ const BlogPostPage = ({ params }: Props) => {
           .select("*")
           .eq("blogPostId", post.id);
 
+        const { data: userProfile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", post.user);
+
         setState({
           post,
+          userProfile: userProfile ? userProfile[0] : null,
           blogItems,
         });
       } else {
-        setState({ post: null, blogItems: null });
+        setState({ post: null, userProfile: null, blogItems: null });
       }
     }
 
@@ -53,28 +61,42 @@ const BlogPostPage = ({ params }: Props) => {
   }, [params.slug]);
 
   return (
-    <div className="">
-      <img
-        src={data.publicUrl || undefined}
-        alt={state.post?.title}
-        className="w-full h-64 object-cover mt-4 rounded border"
-      />
-      <h1 className="mt-6 text-5xl font-bold">{state.post?.title}</h1>
-      <h2 className="mt-4 text-2xl">{state.post?.subTitle}</h2>
-      <p className="mt-3 text-sm">
-        Author: {state.post?.user.name} on{" "}
-        {state.post?.created_at.toLocaleString().substring(0, 10)}
-      </p>
+    <main className="">
+      <figure>
+        <img
+          src={data.publicUrl || undefined}
+          alt={state.post?.title}
+          className="w-full h-64 object-cover mt-4 rounded border"
+        />
+      </figure>
 
-      <div className="mt-6 text-1xl space-y-4">{state.post?.content}</div>
+      <header>
+        <h1 className="mt-6 text-5xl font-bold">{state.post?.title}</h1>
+        <h2 className="mt-4 text-2xl">{state.post?.subTitle}</h2>
+        <p className="mt-3 text-sm flex items-center gap-3">
+          <img
+            src={"https://github.com/" + state.userProfile?.userName + ".png"}
+            className="rounded-full w-10 h-10"
+            alt=""
+          />
+          {state.userProfile?.name} on{" "}
+          {state.post?.created_at.toLocaleString().substring(0, 10)}
+        </p>
+      </header>
+
+      <article className="mt-6 text-1xl space-y-4">
+        {state.post?.content}
+      </article>
+
       <div className="divider"></div>
+
       {state.blogItems?.map((item, index) => (
-        <div>
-          <BlogItemCard key={index} blogPostItem={item} />
+        <section key={index}>
+          <BlogItemCard blogPostItem={item} />
           <div className="divider"></div>
-        </div>
+        </section>
       ))}
-    </div>
+    </main>
   );
 };
 
